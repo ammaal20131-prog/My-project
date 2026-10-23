@@ -80,7 +80,7 @@ function names(){const q=norm($("#q").value);const L=DATA[ci].st.map((s,i)=>[s,i
 function show(i){const c=DATA[ci],s=c.st[i];const direct=!!s.u;
   $("#me").innerHTML=`<h3>${esc(s.n)}</h3><div style="color:var(--muted);margin-top:-8px">${esc(c.cls)}</div>
   <a class="open" href="${esc(direct?s.u:c.url)}" target="_blank" rel="noopener">📂 فتح ملفي على OneDrive</a>
-  ${direct?"":`<div class="tip">بعد فتح الرابط:<ol><li>سجّلي الدخول بحساب المدرسة إن طُلب منك.</li><li>افتحي المجلد الذي باسمك: <b>${esc(s.f)}</b></li><li>ارفعي ملفك داخل المجلد المناسب من المجلدات الأربعة.</li></ol></div>`}
+  ${direct?"":`<div class="tip">بعد فتح الرابط:<ol><li>افتحي المجلد الذي باسمك: <b>${esc(s.f)}</b></li><li>ارفعي ملفك داخل المجلد المناسب من المجلدات الأربعة.</li></ol></div>`}
   <div class="grid">${SUBS.map(([t,d],k)=>`<div class="box ${s.c[k]?"":"zero"}"><b>📁 ${t}</b><small>${d}</small><span class="c">${s.c[k]}</span><small>${s.c[k]?"ملف مرفوع":"لم ترفعي شيئًا بعد"}</small></div>`).join("")}</div>
   <div class="tip">ارفعي كل ملف في مجلده: السيرة الذاتية في «السيرة الذاتية»، والمشروع في «المشاريع»… ولا تحذفي ملفات زميلاتك.</div>`;
   $("#s2").hidden=true;$("#s1").hidden=true;$("#s3").hidden=false;window.scrollTo({top:0,behavior:"smooth"})}
