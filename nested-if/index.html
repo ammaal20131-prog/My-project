@@ -434,7 +434,7 @@ section.stage{padding-block:56px;border-bottom:1px solid var(--line);scroll-marg
 
 <section class="part-band stage" id="part2"><div class="wrap">
   <span class="eyebrow">الجزء الثاني</span><h2>تحديات الشروط المتداخلة</h2>
-  <p>تحديات قصيرة تطبّقين فيها ما تعلمتِه. الأربعة الأولى شرط لفتح الشهادة، وسباق التوقّع اختياري للمتعة.</p>
+  <p>تحديات قصيرة تطبّقين فيها ما تعلمتِه. جرّبي الأربعة الأولى لتُفتح شهادتك. نتائجها للتدريب فقط، ولا تؤثر على شهادتك ولا تقديرك. وسباق التوقّع اختياري للمتعة.</p>
   <nav class="cards" aria-label="التحديات">
     <a href="#parsons"><b>رتّبي البرنامج</b><span>رتّبي أسطر البرنامج</span><em id="c-parsons">0 من 2</em></a>
     <a href="#hunt"><b>صيدي الخطأ</b><span>أي سطر يُفسد البرنامج؟</span><em id="c-hunt">0 من 4</em></a>
@@ -552,7 +552,7 @@ section.stage{padding-block:56px;border-bottom:1px solid var(--line);scroll-marg
     <canvas id="cert" width="1600" height="1130" role="img" aria-label="شهادة إتمام الدرس"></canvas>
     <div class="row" style="justify-content:center"><button class="btn gold" id="cert-save" hidden>تنزيل الشهادة صورة</button><a class="btn" id="cert-send" target="_blank" rel="noopener" hidden style="text-decoration:none">أرسلي شهادتك للمعلمة</a><span class="note" id="cert-note"></span></div>
   </div>
-  <div class="panel stack" style="margin-top:22px"><h3>نتائج الجزء الثاني: التحديات</h3><ul class="sum" id="sum"></ul></div>
+  <div class="panel stack" style="margin-top:22px"><h3>نتائج الجزء الثاني: التحديات (للتدريب، لا تؤثر على الشهادة)</h3><ul class="sum" id="sum"></ul></div>
   <p class="note" style="margin-top:18px">تحمل كل شهادة رمز الجهاز الذي حُلّت عليه ومدة الحل.</p>
 </div></section>
 </main>
@@ -849,7 +849,7 @@ function drawCert(){
   c.textAlign='left';c.direction='ltr';c.fillStyle=ink;c.fillText(DEV,x0,1022);c.textAlign='right';c.direction='rtl';c.fillStyle='#675D6D';c.font=`500 24px ${body}`;c.fillText(lab,x0+cw+lw,1022);c.textAlign='center';
   let hij='',greg='';try{hij=new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'}).format(d)}catch(e){}
   try{greg=new Intl.DateTimeFormat('ar-SA-u-ca-gregory',{day:'numeric',month:'long',year:'numeric'}).format(d)}catch(e){greg=d.toLocaleDateString()}
-  if(FORM.base){const p2=window.NIF_P2||{};const v={name:ST.name,cls:ST.cls,rating:label,score:`${sc}/${tot}`,mins:String(mins),dev:DEV,parsons:`${p2.pz||0}/2`,hunt:`${p2.hu||0}/4`,fill:`${p2.fi||0}/5`,maze:String(p2.maze||0),race:String(p2.race||0)};
+  if(FORM.base){const p2=window.NIF_P2||{};const v={name:ST.name,cls:ST.cls,rating:label,score:`${sc}/${tot}`,mins:String(mins),dev:DEV,parsons:'أكملت',hunt:'أكملت',fill:'أكملت',maze:'أكملت',race:p2.race?String(p2.race):'لم تشارك'};
     const q=Object.entries(FORM.p).map(([k,f])=>encodeURIComponent(f)+'='+encodeURIComponent(v[k]??'')).join('&');const a=$('#cert-send');a.href=FORM.base+(FORM.base.includes('?')?'&':'?')+q;a.hidden=false}
   c.textAlign='center';c.fillStyle=ink;c.font=`700 28px ${body}`;
   c.fillText('التاريخ',W-330,985);c.font=`500 26px ${body}`;c.fillText(hij||greg,W-330,1022);if(hij)c.fillText(greg,W-330,1056);
@@ -915,7 +915,7 @@ $('#pz-code').onclick=e=>{const b=e.target.closest('button');if(!b)return;const 
   if(a==='down'&&i<pzArr.length-1){[pzArr[i+1],pzArr[i]]=[pzArr[i],pzArr[i+1]];f=i+1}
   if(a==='in')pzArr[i].ind=Math.min(3,pzArr[i].ind+1);if(a==='out')pzArr[i].ind=Math.max(0,pzArr[i].ind-1);
   $('#pz-fb').textContent='';pzDraw();const nb=$(`#pz-code button[data-a="${a}"][data-i="${f}"]`);(nb&&!nb.disabled?nb:$(`#pz-code button[data-i="${f}"]`)).focus()};
-$('#pz-check').onclick=()=>{const ans=PUZ[pzI].lines;let order=0,ind=0;pzArr.forEach((l,i)=>{if(l.key!==ans[i][1])order++;else if(l.ind!==ans[i][0])ind++});pzDraw(true);const fb=$('#pz-fb');
+$('#pz-check').onclick=()=>{store.set('pzTried',true);const ans=PUZ[pzI].lines;let order=0,ind=0;pzArr.forEach((l,i)=>{if(l.key!==ans[i][1])order++;else if(l.ind!==ans[i][0])ind++});pzDraw(true);const fb=$('#pz-fb');
   if(!order&&!ind){fb.className='fb ok';fb.textContent='ممتاز! البرنامج مرتب والمسافات صحيحة.';pzSolved[pzI]=true;store.set('pz',pzSolved);upd()}
   else{fb.className='fb no';fb.textContent='الأسطر الحمراء في غير مكانها. تلميح: أول سطر يقرأ المدخلات، ثم يأتي if.'}};
 $('#pz-reset').onclick=()=>pzLoad(pzI);
@@ -951,7 +951,7 @@ const FILL=[
 let fillOk=store.get('fill',[false,false,false,false,false]);
 $('#fill-list').innerHTML=FILL.map((f,i)=>`<div class="fill-item"><div><b>${i+1}.</b> ${f.task}</div><div class="code show">${codeHTML(f.lines)}</div><div class="fb" id="fb${i}" aria-live="polite"></div></div>`).join('');
 FILL.forEach((f,i)=>{const s=$('#f'+i),fb=$('#fb'+i);if(fillOk[i]){s.value=f.a;fb.className='fb ok';fb.innerHTML='صحيح. '+f.why}
-  s.onchange=()=>{if(!s.value){fb.textContent='';return}if(s.value===f.a){fillOk[i]=true;store.set('fill',fillOk);fb.className='fb ok';fb.innerHTML='صحيح. '+f.why;upd()}else{fb.className='fb no';fb.textContent='ليس هذا. اقرئي المطلوب مرة أخرى.'}}});
+  s.onchange=()=>{if(!s.value){fb.textContent='';return}const ft=store.get('fillTried',[false,false,false,false,false]);ft[i]=true;store.set('fillTried',ft);upd();if(s.value===f.a){fillOk[i]=true;store.set('fill',fillOk);fb.className='fb ok';fb.innerHTML='صحيح. '+f.why;upd()}else{fb.className='fb no';fb.textContent='ليس هذا. اقرئي المطلوب مرة أخرى.'}}});
 
 /* ===== 4. Maze ===== */
 const MAZE={
@@ -1019,7 +1019,8 @@ function upd(){const pz=pzSolved.filter(Boolean).length,hu=store.get('hunt',0),f
   $('#c-race').textContent=$('#s-race').textContent=`أفضل نتيجة: ${rBest}`;
   const rows=[['رتّبي البرنامج',`${pz} من 2`],['صيدي الخطأ (أفضل نتيجة)',`${hu} من 4`],['أكملي الشرط',`${fi} من 5`],['متاهة القرار',mr],['سباق التوقّع (أفضل نتيجة)',`${rBest} نقطة`]];
   $('#sum').innerHTML=rows.map(r=>`<li><span>${r[0]}</span><b>${r[1]}</b></li>`).join('');
-  const p2t=[['رتّبي البرنامج: برنامج واحد',pz>=1,'#parsons'],['صيدي الخطأ: البرامج الأربعة',!!store.get('huntDone',false),'#hunt'],['أكملي الشرط: الخمسة كلها',fi===5,'#fill'],['متاهة القرار: جولة واحدة',mzRounds>=1,'#maze']];
+  const ftr=store.get('fillTried',[]),fiTried=fillOk.map((v,k)=>v||!!ftr[k]).filter(Boolean).length;
+  const p2t=[['رتّبي البرنامج: جرّبي واضغطي «تحقّقي»',!!store.get('pzTried',false)||pz>=1,'#parsons'],['صيدي الخطأ: مرّي على البرامج الأربعة',!!store.get('huntDone',false),'#hunt'],['أكملي الشرط: أجيبي عن الخمسة',fiTried===5,'#fill'],['متاهة القرار: جولة واحدة',mzRounds>=1,'#maze']];
   window.NIF_P2={pz,hu,fi,maze:mzRounds,race:rBest,tasks:p2t};window.dispatchEvent(new Event('p2-updated'))}
 upd();lock();
 })();
