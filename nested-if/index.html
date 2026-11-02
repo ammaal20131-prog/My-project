@@ -292,7 +292,7 @@ section.stage{padding-block:56px;border-bottom:1px solid var(--line);scroll-marg
   <div>
     <span class="eyebrow">الوحدة الثالثة · البرمجة مع بايثون</span>
     <h1>الدرس الرابع: الشروط المتداخلة</h1>
-    <p>ندخل قيمًا ونشاهد البرنامج يقرّر خطوة بخطوة: أي شرط تحقّق، وأي سطر نُفِّذ، ولماذا. الدرس جزآن: الأول أنشطة الدرس، والثاني تحديات تطبيقية. أنجزي أنشطة الجزء الأول الـ15 لتحصلي على شهادة إتمام الدرس باسمك.</p>
+    <p>ندخل قيمًا ونشاهد البرنامج يقرّر خطوة بخطوة: أي شرط تحقّق، وأي سطر نُفِّذ، ولماذا. الدرس جزآن: الأول أنشطة الدرس، والثاني تحديات تطبيقية. أنجزي أنشطة الجزأين لتحصلي على شهادة إتمام الدرس باسمك.</p>
     <div class="outcomes" aria-label="نواتج التعلّم" style="margin-top:18px">
       <span class="eyebrow">نواتج التعلّم</span>
       <div class="outcome"><b>01</b><span>أستنتج تعريف التداخل</span></div>
@@ -320,7 +320,7 @@ section.stage{padding-block:56px;border-bottom:1px solid var(--line);scroll-marg
 <main>
 <section class="part-band stage" id="part1"><div class="wrap">
   <span class="eyebrow">الجزء الأول</span><h2>الدرس والأنشطة</h2>
-  <p>مراجعة، ثم مفهوم التداخل، ثم جمل if المتداخلة وصيغتها الصحيحة، وتنتهي بنشاط «ختامها مسك». أنشطة هذا الجزء الخمسة عشر هي التي تفتح الشهادة.</p>
+  <p>مراجعة، ثم مفهوم التداخل، ثم جمل if المتداخلة وصيغتها الصحيحة، وتنتهي بنشاط «ختامها مسك». أكملي أنشطته الخمسة عشر ثم تحديات الجزء الثاني لتُفتح شهادتك.</p>
 </div></section>
 <!-- 1 review -->
 <section class="stage" id="review"><div class="wrap">
@@ -434,7 +434,7 @@ section.stage{padding-block:56px;border-bottom:1px solid var(--line);scroll-marg
 
 <section class="part-band stage" id="part2"><div class="wrap">
   <span class="eyebrow">الجزء الثاني</span><h2>تحديات الشروط المتداخلة</h2>
-  <p>خمسة تحديات تطبّقين فيها ما تعلمتِه. نتائجها تظهر معك في الختام وتُرسل للمعلمة مع شهادتك.</p>
+  <p>خمسة تحديات تطبّقين فيها ما تعلمتِه. إكمالها شرط لفتح الشهادة، ونتائجها تُرسل للمعلمة مع شهادتك.</p>
   <nav class="cards" aria-label="التحديات">
     <a href="#parsons"><b>رتّبي البرنامج</b><span>أسطر مبعثرة ومسافات ضائعة</span><em id="c-parsons">0 من 2</em></a>
     <a href="#hunt"><b>صيدي الخطأ</b><span>أي سطر يُفسد البرنامج؟</span><em id="c-hunt">0 من 6</em></a>
@@ -792,11 +792,12 @@ $('#st-edit').onclick=()=>{if(Object.keys(PR.done).length)return;$('#student-for
 /* ---------- progress UI ---------- */
 function score(){let first=0;KEYS.forEach(k=>{if(PR.done[k]&&!PR.miss[k])first++});return first}
 function updateProgress(){
-  const done=KEYS.filter(k=>PR.done[k]).length,tot=KEYS.length,full=done===tot;
+  const p2=(window.NIF_P2&&window.NIF_P2.tasks)||[];const d1=KEYS.filter(k=>PR.done[k]).length,d2=p2.filter(t=>t[1]).length;
+  const done=d1+d2,tot=KEYS.length+5,full=d1===KEYS.length&&d2===5;
   $('#st-edit').hidden=Object.keys(PR.done).length>0;
   const pill=$('#prog-pill');pill.textContent=full?'الشهادة جاهزة':`${done} / ${tot}`;pill.classList.toggle('full',full);
   if($('#hi-bar')){$('#hi-bar').style.width=(done/tot*100)+'%';$('#hi-prog').textContent=full?'أكملتِ كل الأنشطة، شهادتك جاهزة في الأسفل.':`أنجزتِ ${done} من ${tot} نشاطًا.`}
-  $('#checklist').innerHTML=TASKS.map(t=>{const ks=taskKeys(t),d=ks.filter(k=>PR.done[k]).length;return `<li class="${d===ks.length?'done':''}"><span>${t[2]}${ks.length>1?` <span class="note">(${d}/${ks.length})</span>`:''}</span>${d===ks.length?'':`<a href="${t[3]}">اذهبي إليه</a>`}</li>`}).join('');
+  $('#checklist').innerHTML=TASKS.map(t=>{const ks=taskKeys(t),d=ks.filter(k=>PR.done[k]).length;return `<li class="${d===ks.length?'done':''}"><span>${t[2]}${ks.length>1?` <span class="note">(${d}/${ks.length})</span>`:''}</span>${d===ks.length?'':`<a href="${t[3]}">اذهبي إليه</a>`}</li>`}).join('')+(p2.length?'<li style="background:transparent;border:0;padding:6px 0 0;font-weight:700">الجزء الثاني: التحديات</li>'+p2.map(t=>`<li class="${t[1]?'done':''}"><span>${t[0]}</span>${t[1]?'':`<a href="${t[2]}">اذهبي إليه</a>`}</li>`).join(''):'');
   const ready=full&&ST.name&&ST.cls;
   $('#cert-open').hidden=!ready;
   $('#cert-locked').hidden=!!ready;
@@ -863,7 +864,7 @@ else $('#cert-note').textContent='لحفظها التقطي صورة للشاش�
 $('#cert-save').onclick=()=>{const n=$('#cert-note');$('#cert').toBlob(async b=>{if(!b)return;try{await dl.save({filename:`شهادة - ${ST.name}.png`,data:b});n.textContent='تم تنزيل الشهادة.'}catch(e){n.textContent=e&&e.code==='declined'?'لم يتم التنزيل.':e&&e.code==='rate_limited'?'انتظري قليلًا ثم حاولي مرة أخرى.':'تعذّر التنزيل هنا. التقطي صورة للشاشة.'}},'image/png')};
 if(!(window.claude&&window.claude.use)){const b=$('#cert-save');b.hidden=false;$('#cert-note').textContent='';b.onclick=()=>{try{const a=document.createElement('a');a.download='شهادة - '+ST.name+'.png';a.href=$('#cert').toDataURL('image/png');document.body.appendChild(a);a.click();a.remove();$('#cert-note').textContent='تم تنزيل الشهادة.'}catch(e){$('#cert-note').textContent='لحفظها التقطي صورة للشاشة.'}}}
 document.fonts&&document.fonts.ready.then(()=>{if(!$('#cert-open').hidden)drawCert()});
-window.addEventListener('p2-updated',()=>{if(!$('#cert-open').hidden)drawCert()});
+window.addEventListener('p2-updated',()=>{updateProgress()});
 showStudent();
 
 /* ---------- timers ---------- */
@@ -934,7 +935,7 @@ function hLoad(){const b=BUGS[hI];hTried=false;hDone=false;$('#hunt-task').textC
   $('#hunt-num').textContent=`البرنامج ${hI+1} من ${BUGS.length}`;$('#hunt-fb').textContent='';$('#hunt-next').hidden=true;$('#hunt-restart').hidden=true}
 $('#hunt-code').onclick=e=>{if(hDone)return;const ln=e.target.closest('.ln');if(!ln)return;const i=+ln.dataset.i,b=BUGS[hI],fb=$('#hunt-fb');
   if(i===b.bug){hDone=true;if(!hTried)hScore++;ln.classList.add('good');$('#hunt-code').classList.add('done');fb.className='fb ok';fb.innerHTML=(hTried?'صحيح. ':'أحسنتِ! ')+b.why;
-    store.set('hunt',Math.max(store.get('hunt',0),hScore));upd();if(hI<BUGS.length-1)$('#hunt-next').hidden=false;else{$('#hunt-restart').hidden=false;fb.innerHTML+=`<br><b>انتهى التحدي: ${hScore} من ${BUGS.length} من المحاولة الأولى.</b>`}}
+    store.set('hunt',Math.max(store.get('hunt',0),hScore));upd();if(hI<BUGS.length-1)$('#hunt-next').hidden=false;else{store.set('huntDone',true);upd();$('#hunt-restart').hidden=false;fb.innerHTML+=`<br><b>انتهى التحدي: ${hScore} من ${BUGS.length} من المحاولة الأولى.</b>`}}
   else{hTried=true;ln.classList.add('bad','shake');fb.className='fb no';fb.textContent='هذا السطر سليم. انظري إلى النقطتين والمسافات والرموز.'}};
 $('#hunt-next').onclick=()=>{hI++;hLoad()};
 $('#hunt-restart').onclick=()=>{hI=0;hScore=0;hLoad()};
@@ -1001,7 +1002,7 @@ $('#race-opts').onclick=e=>{const b=e.target.closest('.ropt');if(!b||rLock)retur
   if(b.textContent===rQ.out){rPts++;b.classList.add('right');fb.className='fb ok';fb.textContent='+1';$('#race-pts').textContent=rPts+' نقطة';setTimeout(rNext,350)}
   else{b.classList.add('wrong');$$('#race-opts .ropt').forEach(o=>{if(o.textContent===rQ.out)o.classList.add('right')});fb.className='fb no';fb.textContent='الإجابة الصحيحة باللون الأخضر.';setTimeout(rNext,1400)}};
 function rTick(){rLeft--;$('#race-clock').textContent=rLeft;$('#race-clock').classList.toggle('low',rLeft<=10);$('#race-bar').style.width=(rLeft/60*100)+'%';if(rLeft<=0)rEnd()}
-function rEnd(){clearInterval(rIv);rIv=null;$('#race-play').hidden=true;$('#race-end').hidden=false;$('#race-final').textContent=rPts;
+function rEnd(){clearInterval(rIv);rIv=null;store.set('raceDone',true);$('#race-play').hidden=true;$('#race-end').hidden=false;$('#race-final').textContent=rPts;
   const nb=rPts>rBest;if(nb){rBest=rPts;store.set('race',rBest);upd()}
   $('#race-msg').textContent=nb?'رقم قياسي جديد!':`أفضل نتيجة لك: ${rBest}. حاولي تجاوزها.`;$('#race-again').focus()}
 function rStart(){rPts=0;rLeft=60;$('#race-pts').textContent='0 نقطة';$('#race-clock').textContent='60';$('#race-clock').classList.remove('low');$('#race-bar').style.width='100%';
@@ -1020,7 +1021,8 @@ function upd(){const pz=pzSolved.filter(Boolean).length,hu=store.get('hunt',0),f
   $('#c-race').textContent=$('#s-race').textContent=`أفضل نتيجة: ${rBest}`;
   const rows=[['رتّبي البرنامج',`${pz} من 2`],['صيدي الخطأ (أفضل نتيجة)',`${hu} من 6`],['أكملي الشرط',`${fi} من 5`],['متاهة القرار',mr],['سباق التوقّع (أفضل نتيجة)',`${rBest} نقطة`]];
   $('#sum').innerHTML=rows.map(r=>`<li><span>${r[0]}</span><b>${r[1]}</b></li>`).join('');
-  window.NIF_P2={pz,hu,fi,maze:mzRounds,race:rBest};window.dispatchEvent(new Event('p2-updated'))}
+  const p2t=[['رتّبي البرنامج: حلّ البرنامجين',pz===2,'#parsons'],['صيدي الخطأ: الوصول إلى البرنامج السادس',!!store.get('huntDone',false),'#hunt'],['أكملي الشرط: الخمسة كلها',fi===5,'#fill'],['متاهة القرار: 3 جولات على الأقل',mzRounds>=3,'#maze'],['سباق التوقّع: سباق كامل واحد',!!store.get('raceDone',false),'#race']];
+  window.NIF_P2={pz,hu,fi,maze:mzRounds,race:rBest,tasks:p2t};window.dispatchEvent(new Event('p2-updated'))}
 upd();lock();
 })();
 </script>
